@@ -1,0 +1,55 @@
+enable
+!
+conf t
+!
+hostname Core_A_Switch
+!
+interface vlan 254
+!
+ip address 10.0.0.1 255.255.255.0
+!
+exit
+!
+interface range fastethernet 0/7 - 24
+!
+shutdown
+!
+interface 255
+!
+ip address 10.0.5.5 255.255.255.0
+!
+exit
+!
+interface vlan 256
+!
+ip address 10.0.6.1 255.255.255.0
+!
+exit
+!
+interface range fastethernet 0/3-6
+!
+switchport mode trunk
+!
+switchport native vlan 254
+!
+switchport trunk allowed vlan 1-16,254
+!
+channel-group 1 mode on
+!
+exit
+!
+interface vlan 254
+!
+description mgmt
+!
+exit
+!
+interface vlan 255
+!
+description storage
+!
+exit
+!
+
+
+copy run start
