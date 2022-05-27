@@ -1,0 +1,145 @@
+ISStudent
+enable
+config t
+int f0/15
+switchport mode access
+switchport access vlan 1
+no shut
+end
+copy run start
+
+Chassis A:
+	enable
+	config t
+	exit
+	show run
+	config t
+	int vlan 252
+	ip address 10.0.11.2 255.255.255.0
+	no shut
+	end
+	copy run start
+
+Core SW-A:
+	enable
+	config t
+	int vlan 252
+	ip address 10.0.11.3 255.255.255.0
+	no shut
+	int f0/23
+	int f0/15
+	switchport access vlan 252
+	exit
+	exit
+	show run
+	config t
+	int vlan 252
+	shut
+	exit
+	int vlan 256
+	ip address 10.0.11.1 255.255.255.0
+	no shut
+	end
+	copy run start
+	config t
+	int f0/15
+	switchport access vlan 256
+	end
+	show run
+	copy run start
+	enable
+	config t
+	int f0/16
+	switchport mode access
+	switchport access vlan 256
+	no shut
+	exit
+	exit
+	copy run start
+
+AP-SW:
+	enable
+	config t
+	int vlan256
+	no shut
+	int f1/0/23
+	switchport access vlan 256
+	end
+	show run
+	config t
+	int vlan 252
+	no ip address
+	shut
+	end
+	copy run start
+	config t
+	int f1/0/24
+	switchport access vlan 256
+	end
+	copy run start
+
+Capstone-Wireless:
+	enable
+	config t
+	int dot11radio 0
+	ip address 10.0.11.2 255.255.255.0
+	exit
+	exit
+	config t
+	exit
+	show run
+	config t
+	int BVI1
+	ip address 10.0.11.2 255.255.255.0
+	end
+	copy run start
+	enable
+	config t
+	exit
+	show run
+	config t
+	ip dhcp pool NetA
+	exit
+	no ip dhcp pool NetA
+	ip dhcp excluded-address 10.111.10.1 10.111.10.199
+	no ip dhcp excluded excluded-address 10.111.10.254 10.111.10.255
+	ip dhcp excluded-address 10.0.11.1 10.0.11.10
+	exit
+	config t
+	ip dhcp pool Capstone-WNetwork
+	network 10.0.11.0 255.255.255.0
+	exit
+	exit
+	copy run start
+
+
+To configure the WAP
+-WAP Management Webpage
+-Connect another laptop to SW-1
+-Using a browser, connect to the IP address you just configured
+-Express Set-up
+-Verify the IP address settings
+-Express Security
+-Configure the SSID as TestCapstoneWireless
+-Enable Broadcast SSID in Beacon
+-Set vlan to 256 and natve
+-Security
+-Encryption Manager
+-Set Cipher to AES CCMP
+-SSID Manager
+-Select your SSID - TestCapstone-Wireless
+-Client Authentication Key Management
+-Key Management
+-Mandatory
+-Enable WPA: WPAv2
+-WPA Pre-Shared Key: C@PNcr0nch
+-Enable ASCII
+-Apply
+-DHCP
+-Connect to the Console with a Console cable
+-Config a pool of IP addresses for DHCP
+-configure terminal
+-ip dhcp pool Capstone-Wireless
+-network 10.0.11.0 255.255.255.0
+-end
+-copy running configuration startup-configuration

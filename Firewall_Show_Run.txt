@@ -1,0 +1,127 @@
+conf t
+!
+int eth0/1
+!
+nameif Acore
+!
+security-level 50
+!
+ip address 10.0.0.2 255.255.255.0
+!
+no shut
+!
+exit
+!
+int eth0/1.1
+!
+security-level 50
+!
+ip address 10.0.11.4 255.255.255.0
+!
+vlan 256
+!
+nameif AWireless
+!
+no shut
+!
+exit
+!
+int eth0/2
+!
+nameif Dcore
+!
+security-level 50
+! 
+ip address 10.0.10.6 255.255.255.0
+!
+no shut
+!
+exit
+!
+int eth0/2.1
+!
+security-level 50
+!
+ip address 10.0.5.4 255.255.255.0
+!
+vlan 900
+!
+nameif Dwireless
+!
+no shut
+!
+exit
+!
+access-list RackA permit ip 10.0.11.0 255.255.255.0 10.0.0.0 255.255.255.0
+!
+access-list RackA1 permit ip 10.0.0.0 255.255.255.0 10.0.11.0 255.255.255.0
+!
+access-list Tcp_bypass11 extended permit tcp 10.0.0.0 255.255.255.0 10.0.11.0 255.255.255.0
+!
+class-map Tcp_bypass11 
+!
+match access-list Tcp_bypass11
+!
+policy-map Tcp_bypass11_policy
+!
+class Tcp_bypass11
+!
+set connection advanced-options tcp-state-bypass
+!
+service-policy Tcp_bypass11_policy interface Awireless
+!
+access-list Tcp_bypass0 extended permit tcp 10.0.11.0 255.255.255.0 10.0.0.0 255.255.255.0
+!
+class-map Tcp_bypass0 
+!
+match access-list Tcp_bypass0
+!
+policy-map Tcp_bypass0_policy
+!
+class Tcp_bypass0
+!
+set connection advanced-options tcp-state-bypass
+!
+service-policy Tcp_bypass0_policy interface Acore
+!
+same-security-traffic permit inter-interface
+!
+same-security-traffic permit intra-interface
+!
+access-list inside_access_in extended permit ip any any
+!
+access-list inside_access_out extended permit ip any any
+!
+access-list RackD permit ip 10.0.5.0 255.255.255.0 10.0.10.0 255.255.255.0
+!
+access-list RackD1 permit ip 10.0.10.0 255.255.255.0 10.0.5.0 255.255.255.0
+!
+access-list Tcp_bypass10 extended permit tcp 10.0.5.0 255.255.255.0 10.0.10.0 255.255.255.0
+!
+class-map Tcp_bypass10 
+!
+match access-list Tcp_bypass10
+!
+policy-map Tcp_bypass10_policy
+!
+class Tcp_bypass10
+!
+set connection advanced-options tcp-state-bypass
+!
+service-policy Tcp_bypass10_policy interface Dcore
+!
+access-list Tcp_bypass5 extended permit tcp 10.0.10.0 255.255.255.0 10.0.5.0 255.255.255.0
+!
+class-map Tcp_bypass5 
+!
+match access-list Tcp_bypass5
+!
+policy-map Tcp_bypass5_policy
+!
+class Tcp_bypass5
+!
+set connection advanced-options tcp-state-bypass
+!
+service-policy Tcp_bypass5_policy interface Dwireless
+
+
