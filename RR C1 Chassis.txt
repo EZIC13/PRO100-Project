@@ -1,0 +1,83 @@
+enable
+!
+config t
+!
+hostname Chassis-C1-SW
+!
+ip domain-name ncis.local
+!
+crypto key generate rsa
+512
+!
+line vty 0 4
+!
+transport input ssh
+!
+login local
+!
+password LazerShark$
+!
+exit
+!
+line console 0
+!
+loggin synchronous
+!
+login local
+!
+username ISStudent password LazerShark$
+!
+enable secret LazerShark$
+!
+ip ssh version 2
+!
+no ip domain-lookup
+!
+int po3
+!
+switchport mode trunk
+!
+switchport trunk native vlan 254
+!
+switchport trunk allowed vlan 141-156,254
+!
+no shut
+!
+exit
+!
+int range f4/0/19-22
+!
+no channel-group mode auto
+!
+channel-group 3 mode passive
+!
+no shut
+!
+switchport mode trunk
+!
+switchport trunk native vlan 254
+!
+switchport trunk allowed vlan 141-156,254
+!
+exit
+!
+int vlan 254
+!
+ip address 10.0.10.30 255.255.255.0
+!
+no shut
+!
+exit
+!
+int f4/0/1
+!
+switchport mode access
+!
+switchport access vlan 254
+!
+no switchport mode access
+!
+no switchport access vlan 254
+!
+exit
+!

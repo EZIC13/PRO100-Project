@@ -1,0 +1,87 @@
+enable
+!
+config t
+!
+hostname Rack_C_Core
+!
+int vlan 254
+!
+ip address 10.0.10.2 255.255.255.0
+!
+no shut
+!
+exit
+!
+int po2
+!
+switchport mode trunk
+!
+switchport trunk native vlan 254
+!
+switchport trunk allowed vlan 101-116,121-136,141-156,161-176,254
+!
+no shut
+!
+exit
+!
+int po3
+!
+switchport mode trunk
+!
+switchport trunk native vlan 254
+!
+switchport trunk allowed vlan 101-116,121-136,141-156,161-176,254
+!
+no shut
+!
+exit
+!
+int range f0/19-22
+!
+switchport mode trunk
+!
+switchport trunk native vlan 254
+!
+switchport trunk allowed vlan 101-116,121-136,141-156,161-176,254
+!
+no channel-group mode auto
+!
+channel-group 3 mode active
+!
+no shut
+!
+exit
+!
+int range f0/07-10
+!
+switchport mode trunk
+!
+switchport trunk native vlan 254
+!
+switchport trunk allowed vlan 101-116,121-136,141-156,161-176,254
+!
+no channel-group mode auto
+!
+channel-group 2 mode active
+!
+no shut
+!
+exit
+!
+int f0/1
+!
+switchport mode access
+!
+switchport access vlan 254
+!
+no switchport mode access
+!
+no switchport access vlan 254
+!
+switchport mode trunk
+!
+switchport trunk allowed vlan 101-116,121-136,141-156,161-176,254
+!
+exit
+!
+
